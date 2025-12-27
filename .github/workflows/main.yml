@@ -5,22 +5,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Java 21
+      
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
-      - name: Setup and Extract
+          
+      - name: Extract and Fix
         run: |
           unzip -o Ahmad-Client-Mod.zip
           find . -name "gradlew" -exec chmod +x {} \;
-      - name: Build Mod (Ignore Errors)
+          
+      - name: Build Mod (Force)
         run: |
           GW_PATH=$(find . -name "gradlew" | head -n 1)
-          cd $(dirname $GW_PATH)
-          ./gradlew build -x test || true
-      - name: Upload Mod
+          MOD_DIR=$(dirname $GW_PATH)
+          cd $MOD_DIR
+          ./gradlew assemble
+          
+      - name: Find and Upload Jar
         uses: actions/upload-artifact@v4
         with:
-          name: Ahmad-Mod-Jar
-          path: "**/build/libs/*.jar"
+          name: Ahmad-Client-Jar
+          path: "**/*.jar"
