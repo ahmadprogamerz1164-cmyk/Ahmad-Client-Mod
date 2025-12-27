@@ -6,6 +6,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
       - name: Setup and Extract
         run: |
           unzip -o Ahmad-Client-Mod.zip
