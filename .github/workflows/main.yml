@@ -8,8 +8,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Extract Files
-        run: unzip Ahmad-Client-Mod.zip
+      - name: Extract All Files
+        run: |
+          unzip -o Ahmad-Client-Mod.zip
+          # Agar files kisi folder ke andar chupi hain, toh unhe bahar nikaalo
+          find . -maxdepth 2 -name "gradlew" -exec cp -r $(dirname {})/. . \;
+          chmod +x gradlew
 
       - name: Set up Java 17
         uses: actions/setup-java@v3
@@ -18,9 +22,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Mod
-        run: |
-          chmod +x gradlew
-          ./gradlew build
+        run: ./gradlew build
 
       - name: Save Mod File
         uses: actions/upload-artifact@v3
