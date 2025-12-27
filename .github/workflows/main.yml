@@ -1,0 +1,29 @@
+name: Ahmad Client Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Unzip Project Files
+        run: unzip Ahmad-Client-Mod.zip
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Mod with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+      - name: Upload Mod Jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: Ahmad-Client-Mod-Jar
+          path: build/libs/*.jar
