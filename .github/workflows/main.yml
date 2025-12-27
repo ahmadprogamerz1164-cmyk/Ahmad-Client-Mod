@@ -5,17 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup
+      - name: Extract and Fix
         run: |
-          unzip Ahmad-Client-Mod.zip
+          unzip -o Ahmad-Client-Mod.zip
+          # Yeh line gradlew file ko dhoond kar use permission degi
           find . -name "gradlew" -exec chmod +x {} \;
-      - name: Build
+      - name: Build with Gradle
         run: |
+          # Yeh command mod ko build karegi chahe wo kisi bhi folder mein ho
           GW_PATH=$(find . -name "gradlew" | head -n 1)
           cd $(dirname $GW_PATH)
           ./gradlew build
-      - name: Upload
+      - name: Upload Mod
         uses: actions/upload-artifact@v3
         with:
-          name: Ahmad-Mod
+          name: Ahmad-Client-Mod-Jar
           path: "**/build/libs/*.jar"
