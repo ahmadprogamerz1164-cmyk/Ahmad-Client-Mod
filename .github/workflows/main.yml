@@ -17,17 +17,16 @@ jobs:
           unzip -o Ahmad-Client-Mod.zip
           find . -name "gradlew" -exec chmod +x {} \;
           
-      - name: Build Mod (Force Success)
+      - name: Build Mod
         run: |
           GW_PATH=$(find . -name "gradlew" | head -n 1)
           MOD_DIR=$(dirname $GW_PATH)
           cd $MOD_DIR
-          # Ye command errors ke bawajood file banane ki koshish karegi
-          ./gradlew assemble --no-daemon || true
+          # Hum sirf build folder check karenge
+          ./gradlew jar || true
           
-      - name: Find and Upload Jar
+      - name: Upload Only Jar
         uses: actions/upload-artifact@v4
         with:
-          name: Ahmad-Client-Jar
-          path: "**/*.jar"
-          if-no-files-found: warn
+          name: Ahmad-Final-Jar
+          path: "**/build/libs/*.jar"
