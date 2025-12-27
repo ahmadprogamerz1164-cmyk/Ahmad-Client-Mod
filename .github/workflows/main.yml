@@ -1,31 +1,21 @@
-name: Ahmad Client Build
+name: Ahmad-Build
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Extract All Files
+      - uses: actions/checkout@v3
+      - name: Setup
         run: |
-          unzip -o Ahmad-Client-Mod.zip
-          # Agar files kisi folder ke andar chupi hain, toh unhe bahar nikaalo
-          find . -maxdepth 2 -name "gradlew" -exec cp -r $(dirname {})/. . \;
-          chmod +x gradlew
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Build Mod
-        run: ./gradlew build
-
-      - name: Save Mod File
+          unzip Ahmad-Client-Mod.zip
+          find . -name "gradlew" -exec chmod +x {} \;
+      - name: Build
+        run: |
+          GW_PATH=$(find . -name "gradlew" | head -n 1)
+          cd $(dirname $GW_PATH)
+          ./gradlew build
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: Ahmad-Client-Mod-Jar
-          path: build/libs/*.jar
+          name: Ahmad-Mod
+          path: "**/build/libs/*.jar"
